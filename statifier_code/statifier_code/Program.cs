@@ -6,11 +6,16 @@ namespace statifier
 {
     class read
     {
-		public string typefile = Path.Combine(Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName, "typesStrength.csv");
-        public string typesIndex = "typesIndex.csv";
+        public string typefile = Path.Combine(Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName, "typesStrength.csv");
+        public string typesIndex = Path.Combine(Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName, "typesIndex.csv");
+
+        int[] fetchSize(fileName)
+        {
+            StreamReader reader = new StreamReader
+        }
     }
 
-	class fetch
+    class fetch
     {
 
         struct Pokémon
@@ -20,24 +25,47 @@ namespace statifier
             int type1Num;
             int type2Num;
             int abilityNum;
+            //base stats
+            int HP;
+            int A;
+            int D;
+            int spA;
+            int spD;
+            int S;
         }
 
-        int[] attack(string typefile)
+        int[,] attack(string typefile)
         {
-            int[] temp;
             StreamReader advantages = new StreamReader(typefile);
+            int lines = File.ReadAllLines(typefile).Length;
+            int lineL = File.ReadLines(typefile).Length;
+            string line;
+            int[,] temp = new int[lines, lineL];
+            for (int i = 0; i < lines; i++)
+            {
+                line = advantages.ReadLine();
+                for (int j = 0; j < line.Length; j++)
+                {
+                    temp[i, j] = Convert.ToInt32(line.Substring(j,1));
+                }
+            }
+            advantages.Close();
+            return temp;
         }
 
         Pokémon[] GetPokémon(string fileName)
         {
-			
+            StreamReader pokemon = new StreamReader(fileName);
+            int total = File.ReadAllLines(fileName).Length;
+            int data = File.Read
+
         }
     }
     class MainClass
     {
         public static void Main(string[] args)
         {
-			read read = new read();
+            read read = new read();
             Console.WriteLine(read.typefile);
         }
     }
