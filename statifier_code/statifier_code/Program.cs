@@ -4,47 +4,55 @@ using System.Collections.Generic;
 
 namespace statifier
 {
-    class read
+    static class read
     {
-        public string typefile = Path.Combine(Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName, "typesStrength.csv");
-        public string typesIndex = Path.Combine(Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName, "typesIndex.csv");
-
-        int[] fetchSize(fileName)
-        {
-            StreamReader reader = new StreamReader
-        }
+        public static string typefile = Path.Combine(Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName, "typesStrength.csv");
+        public static string typesIndex = Path.Combine(Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName, "typesIndex.csv");
     }
 
-    class fetch
+    static class fetch
     {
-
         struct Pokémon
         {
-            int natNum;
-            string name;
-            int type1Num;
-            int type2Num;
-            int abilityNum;
+            public int natNum;
+            public string name;
+            public int type1Num;
+            public int type2Num;
+            public int ability1Num;
+            public int ability2Num;
+            public int ability3Num;
             //base stats
-            int HP;
-            int A;
-            int D;
-            int spA;
-            int spD;
-            int S;
+            public int HP;
+            public int A;
+            public  D;
+            public int spA;
+            public int spD;
+            public int S;
         }
 
-        int[,] attack(string typefile)
+        static int[] fetchSize(string fileName)
+        {
+            StreamReader reader = new StreamReader(fileName);
+            int lineL = reader.ReadLine().Split(',').Length;
+            int lines = 1;
+            while (!reader.EndOfStream)
+            {
+                reader.ReadLine();
+                lines++;
+            }
+            reader.Close();
+            return new int[] { lineL, lines };
+        }
+
+        static int[,] attack(string typefile)
         {
             StreamReader advantages = new StreamReader(typefile);
-            int lines = File.ReadAllLines(typefile).Length;
-            int lineL = File.ReadLines(typefile).Length;
             string line;
-            int[,] temp = new int[lines, lineL];
-            for (int i = 0; i < lines; i++)
+            int[,] temp = new int[fetchSize(typefile)[1], fetchSize(typefile)[0]];
+            for (int i = 0; i < fetchSize(typefile)[1]; i++)
             {
                 line = advantages.ReadLine();
-                for (int j = 0; j < line.Length; j++)
+                for (int j = 0; j < fetchSize(typefile)[0]; j++)
                 {
                     temp[i, j] = Convert.ToInt32(line.Substring(j,1));
                 }
@@ -53,11 +61,21 @@ namespace statifier
             return temp;
         }
 
-        Pokémon[] GetPokémon(string fileName)
+        static Pokémon[] GetPokémon(string fileName)
         {
-            StreamReader pokemon = new StreamReader(fileName);
-            int total = File.ReadAllLines(fileName).Length;
-            int data = File.Read
+            StreamReader Plist = new StreamReader(fileName);
+            Pokémon[] pokémons = new Pokémon[fetchSize(fileName)[1]];
+            string[] line = new string[]{};
+            for (int i = 0; i < fetchSize(fileName)[1]; i++)
+            {
+                line = Plist.ReadLine().Split(',');
+                Pokémon pokémon = new Pokémon();
+                pokémon.natNum = Convert.ToInt32(line[0]);
+                pokémon.name = line[1];
+                pokémon.type1Num = Convert.ToInt32(line[2]);
+                pokémon.type2Num = Convert.ToInt32(line[3]);
+
+            }
 
         }
     }
@@ -65,7 +83,6 @@ namespace statifier
     {
         public static void Main(string[] args)
         {
-            read read = new read();
             Console.WriteLine(read.typefile);
         }
     }
