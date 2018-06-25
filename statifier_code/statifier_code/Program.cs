@@ -24,10 +24,21 @@ namespace statifier
             //base stats
             public int HP;
             public int A;
-            public  D;
+            public int D;
             public int spA;
             public int spD;
             public int S;
+        }
+
+        struct Move
+        {
+            public int IndexNo;
+            public string name;
+            public int power;
+            public double accuracy;
+            public int effectIndex;
+            public double effectProb;
+            public double 
         }
 
         static int[] fetchSize(string fileName)
@@ -61,6 +72,23 @@ namespace statifier
             return temp;
         }
 
+        static int[,] defend(string typefile)
+        {
+            StreamReader advantages = new StreamReader(typefile);
+            string line;
+            int[,] temp = new int[fetchSize(typefile)[1], fetchSize(typefile)[1]];
+            for (int i = 0; i < fetchSize(typefile)[1]; i++)
+            {
+                line = advantages.ReadLine();
+                for (int j = 0; j < fetchSize(typefile)[0]; j++)
+                {
+                    temp[j, i] = Convert.ToInt32(line.Substring(j, 1));
+                }
+            }
+            advantages.Close();
+            return temp;
+        }
+
         static Pokémon[] GetPokémon(string fileName)
         {
             StreamReader Plist = new StreamReader(fileName);
@@ -74,9 +102,26 @@ namespace statifier
                 pokémon.name = line[1];
                 pokémon.type1Num = Convert.ToInt32(line[2]);
                 pokémon.type2Num = Convert.ToInt32(line[3]);
+                pokémon.ability1Num = Convert.ToInt32(line[4]);
+                pokémon.ability2Num = Convert.ToInt32(line[5]);
+                pokémon.ability3Num = Convert.ToInt32(line[6]);
 
+                pokémon.HP = Convert.ToInt32(line[7]);
+                pokémon.A = Convert.ToInt32(line[8]);
+                pokémon.D = Convert.ToInt32(line[9]);
+                pokémon.spA = Convert.ToInt32(line[10]);
+                pokémon.spD = Convert.ToInt32(line[11]);
+                pokémon.S = Convert.ToInt32(line[12]);
+                pokémons[i] = pokémon;
             }
+            Plist.Close();
+            return pokémons;
+        }
 
+        static double Damage(int level, Move move, Pokémon p1, Pokémon p2, int modifier)
+        {
+            double damage = (((((2*level/5)+2)*move.power*(p1.A/p2.D))/50)+2)*modifier;
+            return damage;
         }
     }
     class MainClass
