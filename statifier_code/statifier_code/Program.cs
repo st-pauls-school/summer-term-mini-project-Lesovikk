@@ -123,6 +123,11 @@ namespace statifier
             double damage = (((((2*level/5)+2)*move.power*(p1.A/p2.D))/50)+2)*modifier;
             return damage;
         }
+
+        static double modifier(double targets, double weather, double Critical, double random, double STAB, double type, double Burn, double other)
+        {
+            
+        }
     }
     class MainClass
     {
